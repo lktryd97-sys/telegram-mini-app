@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101020">
+<title>PRS$ | Mining</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+*{box-sizing:border-box}
+:root{
+--bg:#101020;--card:#1c1c32;--gold:#ffd76a;
+--purple:#8b5cf6;--text:#fff;--muted:#a7a7c5;
+}
+body{
+margin:0;background:var(--bg);color:var(--text);
+font-family:Arial,Tahoma,sans-serif;padding-bottom:90px;
+}
+button{font-family:inherit;cursor:pointer}
+.header{
+display:flex;justify-content:space-between;align-items:center;
+padding:20px 18px;
+}
+.logo{font-size:26px;font-weight:900;color:var(--gold)}
+.badge{background:#292442;padding:8px 12px;border-radius:20px;color:#d7c9ff;font-size:12px}
+.page{display:none;padding:12px 18px;max-width:520px;margin:auto}
+.page.active{display:block}
+.card{
+background:linear-gradient(145deg,#242440,#19192d);
+border:1px solid #343451;border-radius:22px;padding:20px;
+margin-bottom:16px;
+}
+.center{text-align:center}
+.muted{color:var(--muted);font-size:13px}
+.balance{font-size:39px;font-weight:900;color:var(--gold);margin:15px 0}
+.coin{
+width:170px;height:170px;border-radius:50%;margin:25px auto;
+display:flex;align-items:center;justify-content:center;
+background:radial-gradient(circle at 35% 30%,#fff2b4,#ffc83d 30%,#a96512 75%,#ffe58a);
+border:7px solid #ffe9a0;
+box-shadow:0 0 35px #ffc83d55,inset 0 0 20px #9c610b;
+color:#342000;font-size:42px;font-weight:1000;
+user-select:none;touch-action:manipulation;
+transition:transform .08s;
+}
+.coin:active{transform:scale(.94)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{background:#24243d;padding:15px;border-radius:16px;text-align:center}
+.stat strong{display:block;font-size:21px;color:var(--gold);margin-bottom:6px}
+.primary{
+width:100%;border:0;border-radius:14px;padding:15px;
+background:linear-gradient(100deg,#ffda78,#ffa928);
+color:#261800;font-weight:bold;font-size:15px;
+}
+.secondary{
+width:100%;border:1px solid #4a436a;border-radius:14px;
+padding:13
