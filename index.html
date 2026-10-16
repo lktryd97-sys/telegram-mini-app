@@ -55,4 +55,335 @@ color:#261800;font-weight:bold;font-size:15px;
 }
 .secondary{
 width:100%;border:1px solid #4a436a;border-radius:14px;
-padding:13
+padding:13px;background:#292443;color:white;font-weight:bold;
+}
+.item{
+display:flex;align-items:center;gap:12px;
+background:#25253e;padding:15px;border-radius:16px;margin:12px 0;
+}
+.item-icon{font-size:27px}
+.item-info{flex:1}
+.item-info strong{display:block;margin-bottom:6px}
+.item-info small{color:var(--muted)}
+.buy{border:0;border-radius:10px;background:var(--gold);padding:10px;font-weight:bold}
+.buy:disabled{opacity:.45}
+.progress{height:8px;background:#34344e;border-radius:8px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,#8b5cf6,#ffd76a)}
+.nav{
+position:fixed;bottom:0;left:0;right:0;
+display:flex;justify-content:space-around;align-items:center;
+background:#17172a;border-top:1px solid #343451;
+padding:10px 3px max(10px,env(safe-area-inset-bottom));
+z-index:10;
+}
+.nav button{
+background:none;border:0;color:#aaaac5;
+display:flex;flex-direction:column;align-items:center;
+gap:5px;font-size:10px;min-width:0;flex:1;
+}
+.nav button span{font-size:22px}
+.nav button.active{color:var(--gold)}
+h2{font-size:23px;margin:10px 0 18px}
+h3{margin:0 0 10px}
+.notice{font-size:12px;color:var(--muted);line-height:1.8}
+.tag{background:#30304a;color:#e5d6ff;padding:5px 9px;border-radius:8px;font-size:11px}
+.big-number{font-size:25px;font-weight:bold;color:var(--gold)}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+<div class="logo">PRS<span style="color:white">$</span></div>
+<div class="badge">💎 MINING NETWORK</div>
+</header>
+
+<!-- خانه -->
+<section id="home" class="page active">
+<div class="card center">
+<div class="muted">موجودی امتیاز شما</div>
+<div class="balance" id="balance">0</div>
+<div class="muted">PRS$ POINTS</div>
+
+<div class="coin" id="coin" role="button" aria-label="دریافت امتیاز">PRS$</div>
+
+<div class="muted">برای دریافت امتیاز روی سکه بزن!</div>
+<div class="progress"><div id="energyBar"></div></div>
+<div class="stats">
+<div class="stat"><strong id="energy">1000</strong><span class="muted">انرژی</span></div>
+<div class="stat"><strong id="power">1</strong><span class="muted">قدرت هر ضربه</span></div>
+</div>
+</div>
+
+<div class="card">
+<h3>⚡ وضعیت ماینر</h3>
+<div class="stats">
+<div class="stat"><strong id="level">1</strong><span class="muted">سطح ماینر</span></div>
+<div class="stat"><strong id="earned">0</strong><span class="muted">امتیاز امروز</span></div>
+</div>
+<button class="primary" style="margin-top:15px" onclick="showPage('miners')">ارتقای ماینر 🚀</button>
+</div>
+</section>
+
+<!-- ماینرها -->
+<section id="miners" class="page">
+<h2>⛏️ فروشگاه ماینر</h2>
+<div class="card">
+<div class="muted">موجودی فعلی</div>
+<div class="balance" id="shopBalance">0</div>
+<p class="notice">با خرید ارتقا، قدرت هر ضربه بیشتر می‌شود. سقف سطح این نسخه ۱۰۰۰۰ است.</p>
+</div>
+<div id="minerList"></div>
+</section>
+
+<!-- ماموریت -->
+<section id="tasks" class="page">
+<h2>🎯 ماموریت‌ها</h2>
+<div class="card">
+<h3>🎁 جایزه فعالیت</h3>
+<p class="muted">ماموریت‌ها را انجام بده و امتیاز آزمایشی بگیر.</p>
+<div id="taskList"></div>
+</div>
+</section>
+
+<!-- جایزه روزانه -->
+<section id="daily" class="page">
+<h2>🎁 جایزه روزانه</h2>
+<div class="card center">
+<div style="font-size:60px">🎁</div>
+<h3>جایزه ورود روزانه</h3>
+<p class="muted">هر روز یک بار جایزه آزمایشی دریافت کن.</p>
+<div class="balance" style="font-size:30px">+500</div>
+<button class="primary" id="dailyBtn" onclick="claimDaily()">دریافت جایزه</button>
+<p class="notice">این امتیازها در همین مرورگر ذخیره می‌شوند.</p>
+</div>
+</section>
+
+<!-- رتبه بندی -->
+<section id="leaderboard" class="page">
+<h2>🏆 رتبه‌بندی</h2>
+<div class="card">
+<div class="item">
+<div class="item-icon">🥇</div>
+<div class="item-info"><strong>رتبه شما</strong><small>امتیاز ذخیره‌شده در دستگاه شما</small></div>
+<strong id="rankPoints">0</strong>
+</div>
+<p class="notice">رتبه‌بندی سراسری کاربران هنوز به سرور متصل نشده است.</p>
+</div>
+</section>
+
+<!-- دوستان -->
+<section id="friends" class="page">
+<h2>👥 دوستان</h2>
+<div class="card center">
+<div style="font-size:50px">🤝</div>
+<h3>دعوت از دوستان</h3>
+<p class="muted">سیستم دعوت در نسخه فعلی غیرفعال است.</p>
+<button class="secondary" disabled>به‌زودی فعال می‌شود</button>
+</div>
+</section>
+
+<!-- کیف پول -->
+<section id="wallet" class="page">
+<h2>👛 کیف پول</h2>
+<div class="card center">
+<div style="font-size:50px">🔐</div>
+<h3>اتصال کیف پول</h3>
+<p class="muted">برداشت واقعی توکن در این نسخه فعال نیست.</p>
+<button class="secondary" disabled>برداشت غیرفعال است</button>
+</div>
+<div class="card">
+<h3>اطلاعات امتیاز</h3>
+<p class="notice">نسبت نمایشی پروژه: هر ۱۰٬۰۰۰ امتیاز برابر با ۱ PRS محاسبه می‌شود. این محاسبه به معنی داشتن توکن واقعی نیست.</p>
+</div>
+</section>
+
+<!-- تنظیمات -->
+<section id="profile" class="page">
+<h2>👤 حساب کاربری</h2>
+<div class="card">
+<div class="item-icon">💎</div>
+<h3>خوش آمدی به PRS$</h3>
+<p class="muted">نسخه آزمایشی مینی‌اپ</p>
+<div class="item"><div class="item-info">شناسه تلگرام</div><strong id="tgUser">مهمان</strong></div>
+<div class="item"><div class="item-info">سطح ماینر</div><strong id="profileLevel">1</strong></div>
+</div>
+<div class="card">
+<h3>⚙️ تنظیمات</h3>
+<button class="secondary" onclick="resetGame()">شروع مجدد بازی</button>
+<p class="notice">شروع مجدد، امتیازهای ذخیره‌شده این مرورگر را پاک می‌کند.</p>
+</div>
+</section>
+
+<nav class="nav">
+<button class="active" data-page="home" onclick="showPage('home',this)"><span>🏠</span>خانه</button>
+<button data-page="miners" onclick="showPage('miners',this)"><span>⛏️</span>ماینر</button>
+<button data-page="tasks" onclick="showPage('tasks',this)"><span>🎯</span>ماموریت</button>
+<button data-page="daily" onclick="showPage('daily',this)"><span>🎁</span>جایزه</button>
+<button data-page="leaderboard" onclick="showPage('leaderboard',this)"><span>🏆</span>رتبه‌ها</button>
+<button data-page="profile" onclick="showPage('profile',this)"><span>👤</span>حساب</button>
+</nav>
+
+<script>
+const tg = window.Telegram?.WebApp;
+if(tg){
+  tg.ready();
+  tg.expand();
+  if(tg.initDataUnsafe?.user){
+    const u=tg.initDataUnsafe.user;
+    document.getElementById('tgUser').textContent=u.username?'@'+u.username:(u.first_name||'کاربر');
+  }
+}
+
+const KEY='prs_demo_game_v1';
+const defaults={
+  points:0,energy:1000,power:1,level:1,earned:0,
+  day:'',tasks:[],lastEnergy:Date.now()
+};
+let state;
+try{
+  state={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')};
+}catch(e){state={...defaults};}
+
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(state));}
+  catch(e){}
+}
+function fmt(n){return Math.floor(n).toLocaleString('en-US');}
+
+function render(){
+  document.getElementById('balance').textContent=fmt(state.points);
+  document.getElementById('shopBalance').textContent=fmt(state.points);
+  document.getElementById('energy').textContent=fmt(state.energy);
+  document.getElementById('power').textContent=fmt(state.power);
+  document.getElementById('level').textContent=fmt(state.level);
+  document.getElementById('profileLevel').textContent=fmt(state.level);
+  document.getElementById('earned').textContent=fmt(state.earned);
+  document.getElementById('rankPoints').textContent=fmt(state.points);
+  document.getElementById('energyBar').style.width=(state.energy/1000*100)+'%';
+
+  const today=new Date().toDateString();
+  const claimed=state.day===today;
+  const db=document.getElementById('dailyBtn');
+  db.disabled=claimed;
+  db.textContent=claimed?'جایزه امروز دریافت شد':'دریافت جایزه +500';
+
+  renderMiners();
+  renderTasks();
+}
+
+document.getElementById('coin').addEventListener('click',()=>{
+  if(state.energy<1){
+    alert('انرژی کافی نیست! کمی صبر کن.');
+    return;
+  }
+  state.points+=state.power;
+  state.earned+=state.power;
+  state.energy-=1;
+  save();
+  render();
+});
+
+function regenerateEnergy(){
+  const now=Date.now();
+  const elapsed=Math.max(0,now-(state.lastEnergy||now));
+  const restored=Math.floor(elapsed/3000);
+  if(restored>0){
+    state.energy=Math.min(1000,state.energy+restored);
+    state.lastEnergy=now;
+    save();
+    render();
+  }
+}
+setInterval(regenerateEnergy,3000);
+
+const upgrades=[
+ {name:'ماینر برنزی',icon:'🥉',price:100,power:1},
+ {name:'ماینر نقره‌ای',icon:'🥈',price:500,power:3},
+ {name:'ماینر طلایی',icon:'🥇',price:2000,power:10},
+ {name:'ماینر پلاتینی',icon:'💎',price:10000,power:50},
+ {name:'ماینر افسانه‌ای',icon:'🚀',price:50000,power:200}
+];
+
+function renderMiners(){
+ const box=document.getElementById('minerList');
+ box.innerHTML='';
+ upgrades.forEach((u,i)=>{
+  const cost=Math.floor(u.price*Math.pow(1.8,Math.max(0,state.level-1)));
+  const div=document.createElement('div');
+  div.className='item';
+  div.innerHTML=`
+   <div class="item-icon">${u.icon}</div>
+   <div class="item-info">
+    <strong>${u.name}</strong>
+    <small>قدرت پایه: +${u.power} | قیمت: ${fmt(cost)} امتیاز</small>
+   </div>
+   <button class="buy" ${state.points<cost||state.level>=10000?'disabled':''}>خرید</button>`;
+  div.querySelector('button').onclick=()=>{
+    if(state.points<cost||state.level>=10000)return;
+    state.points-=cost;
+    state.power+=u.power;
+    state.level=Math.min(10000,state.level+1);
+    save();render();
+  };
+  box.appendChild(div);
+ });
+}
+
+const missions=[
+ {id:'tap100',title:'کلیک‌زن تازه‌کار',desc:'۱۰۰ امتیاز از کلیک به دست بیاور',goal:100,reward:100},
+ {id:'tap1000',title:'ماینر فعال',desc:'۱۰۰۰ امتیاز از کلیک به دست بیاور',goal:1000,reward:500},
+ {id:'upgrade',title:'ارتقای ماینر',desc:'سطح ماینر خود را به ۲ برسان',goal:2,reward:250}
+];
+function isDone(id){return state.tasks.includes(id);}
+function renderTasks(){
+ const box=document.getElementById('taskList');
+ box.innerHTML='';
+ missions.forEach(m=>{
+  const progress=m.id==='upgrade'?state.level:state.earned;
+  const done=isDone(m.id);
+  const div=document.createElement('div');
+  div.className='item';
+  div.innerHTML=`
+   <div class="item-icon">🎯</div>
+   <div class="item-info">
+    <strong>${m.title}</strong>
+    <small>${m.desc}</small>
+    <div class="muted">${fmt(Math.min(progress,m.goal))} / ${fmt(m.goal)} · جایزه ${fmt(m.reward)}</div>
+   </div>
+   <button class="buy" ${done||progress<m.goal?'disabled':''}>${done?'انجام شد':'دریافت'}</button>`;
+  div.querySelector('button').onclick=()=>{
+   if(done||progress<m.goal)return;
+   state.tasks.push(m.id);
+   state.points+=m.reward;
+   save();render();
+  };
+  box.appendChild(div);
+ });
+}
+
+function claimDaily(){
+ const today=new Date().toDateString();
+ if(state.day===today)return;
+ state.day=today;
+ state.points+=500;
+ save();render();
+}
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+ const selected=btn||document.querySelector('.nav button[data-page="'+id+'"]');
+ if(selected)selected.classList.add('active');
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function resetGame(){
+ if(!confirm('تمام امتیازهای ذخیره‌شده پاک شوند؟'))return;
+ localStorage.removeItem(KEY);
+ state={...defaults,lastEnergy:Date.now()};
+ save();render();showPage('home');
+}
+render();
+</script>
+</body>
+  </html>
